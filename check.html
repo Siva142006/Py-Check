@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>PyCheck - Python Code Fixer</title>
+    <link rel="icon" type="image/png" href="../static/pycheck_logo.png" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+
+    <style>
+      pre {
+        background: #f8f9fa;
+        padding: 1rem;
+        border-radius: 6px;
+        overflow: auto;
+      }
+      html,
+      body {
+        height: 100%;
+      }
+
+      body {
+        display: flex;
+        flex-direction: column;
+        padding-top: 70px;
+      }
+
+      .container {
+        flex: 1;
+      }
+    </style>
+  </head>
+  <body class="bg-light text-dark">
+    <!-- Navbar -->
+    <header class="bg-dark text-light p-2 fixed-top">
+      <div class="row">
+        <div class="col-6 mt-2">
+          <h3 class="text-light">
+            <a href="/" class="text-decoration-none">
+              <img
+                src="../static/pycheck_logo.png"
+                alt="logo"
+                height="40"
+                width="50"
+              />
+            </a>
+            <a href="/" class="text-decoration-none text-light">PyCheck</a>
+          </h3>
+        </div>
+        <div class="col-6 d-flex justify-content-end">
+          <nav class="navbar navbar-expand-lg navbar-dark">
+            <button
+              class="navbar-toggler"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#menu"
+              aria-controls="menu"
+              aria-expanded="false"
+              aria-label="Toggle navigation"
+            >
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="menu">
+              <ul class="navbar-nav">
+                <li class="nav-item mx-2">
+                  <a href="/" class="nav-link">Home</a>
+                </li>
+                <li class="nav-item mx-2">
+                  <a href="/check" class="nav-link active">Checker</a>
+                </li>
+              </ul>
+            </div>
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <div class="container py-4">
+      <h1 class="mb-3">Python Code Fixer</h1>
+      <p class="text-muted">
+        Paste Python code below. The app will correct errors, fix formatting,
+        and even mistyped keywords.
+      </p>
+
+      <form method="post">
+        <div class="mb-3">
+          <textarea
+            name="code"
+            rows="12"
+            class="form-control bg-dark text-light"
+          >{{ code_input }}</textarea>
+        </div>
+        <button class="btn btn-primary">Check & Fix</button>
+      </form>
+
+      {% if fixed_code %}
+      <hr />
+      <h5>Original Compilation</h5>
+      <p class="text-dark">{{ orig_msg }}</p>
+
+      <h5>Logs</h5>
+      <pre class="bg-dark text-light">{{ logs|join("\n") }}</pre>
+
+      <div class="row mt-4">
+        <div class="col-md-6">
+          <h6 class="text-danger">Original ❌</h6>
+          <pre class="bg-dark text-light">{{ code_input }}</pre>
+        </div>
+        <div class="col-md-6">
+          <div class="d-flex justify-content-between align-items-center">
+            <h6 class="text-success mb-0">Fixed ✅</h6>
+            <button
+              class="btn btn-sm btn-primary"
+              onclick="copyFixedCode(this)"
+              type="button"
+            >
+              Copy
+            </button>
+          </div>
+          <pre class="bg-dark text-light mt-2" id="fixedCode">{{ fixed_code }}</pre>
+        </div>
+      </div>
+      {% endif %}
+    </div>
+
+    <footer class="bg-dark text-light py-3 text-center">
+      <p class="mb-0">© 2025 PyCheck | Built with ❤️ using Flask & Bootstrap</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+      function copyFixedCode(button) {
+        const codeBlock = document.getElementById("fixedCode").innerText;
+        navigator.clipboard.writeText(codeBlock).then(() => {
+          const oldText = button.innerText;
+          button.innerText = "Copied!";
+          button.disabled = true;
+          setTimeout(() => {
+            button.innerText = oldText;
+            button.disabled = false;
+          }, 1500);
+        });
+      }
+    </script>
+  </body>
+</html>
